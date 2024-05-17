@@ -1,0 +1,229 @@
+name: feature_extraction_pipeline
+services:
+  biopython_component:
+    build:
+      args: []
+      context: c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\components\biopython_component
+    command:
+    - --metadata
+    - '{"base_path": "/.fondant", "pipeline_name": "feature_extraction_pipeline",
+      "run_id": "feature_extraction_pipeline-20240517133520", "component_id": "biopython_component",
+      "cache_key": "63875fc0bdf2db533d31f57fc590cafb"}'
+    - --output_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/biopython_component/manifest.json
+    - --cache
+    - 'False'
+    - --cluster_type
+    - default
+    - --operation_spec
+    - '{"specification": {"name": "Biopython component", "image": "biopython_component:latest",
+      "description": "A component that uses Biopython to perform certain operations
+      on sequences.", "consumes": {"sequence": {"type": "string"}}, "produces": {"sequence":
+      {"type": "string"}, "sequence_length": {"type": "int64"}, "molecular_weight":
+      {"type": "float64"}, "aromaticity": {"type": "float64"}, "isoelectric_point":
+      {"type": "float64"}, "instability_index": {"type": "float64"}, "gravy": {"type":
+      "float64"}, "helix": {"type": "float64"}, "turn": {"type": "float64"}, "sheet":
+      {"type": "float64"}, "charge_at_ph3": {"type": "float64"}, "charge_at_ph5":
+      {"type": "float64"}, "charge_at_ph7": {"type": "float64"}, "charge_at_ph9":
+      {"type": "float64"}, "molar_extinction_coefficient_oxidized": {"type": "int64"},
+      "molar_extinction_coefficient_reduced": {"type": "int64"}, "flexibility_max":
+      {"type": "float64"}, "flexibility_min": {"type": "float64"}, "flexibility_mean":
+      {"type": "float64"}}}, "consumes": {}, "produces": {}}'
+    - --input_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/load_from_parquet/manifest.json
+    depends_on:
+      load_from_parquet:
+        condition: service_completed_successfully
+    entrypoint:
+    - fondant
+    - execute
+    - main
+    labels:
+      pipeline_description: A pipeline to extract features from protein sequences.
+    ports:
+    - 8787:8787
+    volumes:
+    - source: C:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\.fondant
+      target: /.fondant
+      type: bind
+    - c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline/data:/data
+  generate_protein_sequence_checksum_component:
+    build:
+      args: []
+      context: c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\components\generate_protein_sequence_checksum_component
+    command:
+    - --metadata
+    - '{"base_path": "/.fondant", "pipeline_name": "feature_extraction_pipeline",
+      "run_id": "feature_extraction_pipeline-20240517133520", "component_id": "generate_protein_sequence_checksum_component",
+      "cache_key": "4ae2838734ea9acc6a3f256211fa2b54"}'
+    - --output_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/generate_protein_sequence_checksum_component/manifest.json
+    - --cache
+    - 'False'
+    - --cluster_type
+    - default
+    - --operation_spec
+    - '{"specification": {"name": "Generate Protein Sequence Checksum Component",
+      "image": "generate_protein_sequence_checksum_component:latest", "description":
+      "A component that applies that uses the checksum operator on the ''sequence''
+      from Biopython to create the ''sequence_id'' feature.", "consumes": {"sequence":
+      {"type": "string"}}, "produces": {"sequence": {"type": "string"}, "sequence_checksum":
+      {"type": "string"}}}, "consumes": {}, "produces": {}}'
+    - --input_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/biopython_component/manifest.json
+    depends_on:
+      biopython_component:
+        condition: service_completed_successfully
+    entrypoint:
+    - fondant
+    - execute
+    - main
+    labels:
+      pipeline_description: A pipeline to extract features from protein sequences.
+    ports:
+    - 8787:8787
+    volumes:
+    - source: C:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\.fondant
+      target: /.fondant
+      type: bind
+    - c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline/data:/data
+  ifeatureomega_component:
+    build:
+      args: []
+      context: c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\components\iFeatureOmega_component
+    command:
+    - --metadata
+    - '{"base_path": "/.fondant", "pipeline_name": "feature_extraction_pipeline",
+      "run_id": "feature_extraction_pipeline-20240517133520", "component_id": "ifeatureomega_component",
+      "cache_key": "b61824321ee60f9ee1cf0244fb9c8cfd"}'
+    - --output_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/ifeatureomega_component/manifest.json
+    - --descriptors
+    - '["AAC", "CTDC", "CTDT"]'
+    - --input_partition_rows
+    - '5'
+    - --cache
+    - 'False'
+    - --cluster_type
+    - default
+    - --operation_spec
+    - '{"specification": {"name": "iFeatureOmega component", "image": "iFeatureOmega_component:latest",
+      "description": "A component that uses iFeatureOmega to perform certain operations
+      on sequences.", "consumes": {"sequence": {"type": "string"}, "sequence_checksum":
+      {"type": "string"}}, "produces": {"sequence": {"type": "string"}, "sequence_checksum":
+      {"type": "string"}, "AAC_A": {"type": "float64"}, "AAC_C": {"type": "float64"},
+      "AAC_D": {"type": "float64"}, "AAC_E": {"type": "float64"}, "AAC_F": {"type":
+      "float64"}, "AAC_G": {"type": "float64"}, "AAC_H": {"type": "float64"}, "AAC_I":
+      {"type": "float64"}, "AAC_K": {"type": "float64"}, "AAC_L": {"type": "float64"},
+      "AAC_M": {"type": "float64"}, "AAC_N": {"type": "float64"}, "AAC_P": {"type":
+      "float64"}, "AAC_Q": {"type": "float64"}, "AAC_R": {"type": "float64"}, "AAC_S":
+      {"type": "float64"}, "AAC_T": {"type": "float64"}, "AAC_V": {"type": "float64"},
+      "AAC_W": {"type": "float64"}, "AAC_Y": {"type": "float64"}, "CTDC_charge.G1":
+      {"type": "float64"}, "CTDC_charge.G2": {"type": "float64"}, "CTDC_charge.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_ARGP820101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_ARGP820101.G2": {"type": "float64"}, "CTDC_hydrophobicity_ARGP820101.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_CASG920101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_CASG920101.G2": {"type": "float64"}, "CTDC_hydrophobicity_CASG920101.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_ENGD860101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_ENGD860101.G2": {"type": "float64"}, "CTDC_hydrophobicity_ENGD860101.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_FASG890101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_FASG890101.G2": {"type": "float64"}, "CTDC_hydrophobicity_FASG890101.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_PONP930101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_PONP930101.G2": {"type": "float64"}, "CTDC_hydrophobicity_PONP930101.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_PRAM900101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_PRAM900101.G2": {"type": "float64"}, "CTDC_hydrophobicity_PRAM900101.G3":
+      {"type": "float64"}, "CTDC_hydrophobicity_ZIMJ680101.G1": {"type": "float64"},
+      "CTDC_hydrophobicity_ZIMJ680101.G2": {"type": "float64"}, "CTDC_hydrophobicity_ZIMJ680101.G3":
+      {"type": "float64"}, "CTDC_normwaalsvolume.G1": {"type": "float64"}, "CTDC_normwaalsvolume.G2":
+      {"type": "float64"}, "CTDC_normwaalsvolume.G3": {"type": "float64"}, "CTDC_polarity.G1":
+      {"type": "float64"}, "CTDC_polarity.G2": {"type": "float64"}, "CTDC_polarity.G3":
+      {"type": "float64"}, "CTDC_polarizability.G1": {"type": "float64"}, "CTDC_polarizability.G2":
+      {"type": "float64"}, "CTDC_polarizability.G3": {"type": "float64"}, "CTDC_secondarystruct.G1":
+      {"type": "float64"}, "CTDC_secondarystruct.G2": {"type": "float64"}, "CTDC_secondarystruct.G3":
+      {"type": "float64"}, "CTDC_solventaccess.G1": {"type": "float64"}, "CTDC_solventaccess.G2":
+      {"type": "float64"}, "CTDC_solventaccess.G3": {"type": "float64"}, "CTDT_charge.Tr1221":
+      {"type": "float64"}, "CTDT_charge.Tr1331": {"type": "float64"}, "CTDT_charge.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_ARGP820101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_ARGP820101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_ARGP820101.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_CASG920101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_CASG920101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_CASG920101.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_ENGD860101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_ENGD860101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_ENGD860101.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_FASG890101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_FASG890101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_FASG890101.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_PONP930101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_PONP930101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_PONP930101.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_PRAM900101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_PRAM900101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_PRAM900101.Tr2332":
+      {"type": "float64"}, "CTDT_hydrophobicity_ZIMJ680101.Tr1221": {"type": "float64"},
+      "CTDT_hydrophobicity_ZIMJ680101.Tr1331": {"type": "float64"}, "CTDT_hydrophobicity_ZIMJ680101.Tr2332":
+      {"type": "float64"}, "CTDT_normwaalsvolume.Tr1221": {"type": "float64"}, "CTDT_normwaalsvolume.Tr1331":
+      {"type": "float64"}, "CTDT_normwaalsvolume.Tr2332": {"type": "float64"}, "CTDT_polarity.Tr1221":
+      {"type": "float64"}, "CTDT_polarity.Tr1331": {"type": "float64"}, "CTDT_polarity.Tr2332":
+      {"type": "float64"}, "CTDT_polarizability.Tr1221": {"type": "float64"}, "CTDT_polarizability.Tr1331":
+      {"type": "float64"}, "CTDT_polarizability.Tr2332": {"type": "float64"}, "CTDT_secondarystruct.Tr1221":
+      {"type": "float64"}, "CTDT_secondarystruct.Tr1331": {"type": "float64"}, "CTDT_secondarystruct.Tr2332":
+      {"type": "float64"}, "CTDT_solventaccess.Tr1221": {"type": "float64"}, "CTDT_solventaccess.Tr1331":
+      {"type": "float64"}, "CTDT_solventaccess.Tr2332": {"type": "float64"}}, "args":
+      {"descriptors": {"type": "list", "description": "List of descriptors to be calculated",
+      "default": ["AAC", "CTDC", "CTDT"]}}}, "consumes": {}, "produces": {}}'
+    - --input_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/generate_protein_sequence_checksum_component/manifest.json
+    depends_on:
+      generate_protein_sequence_checksum_component:
+        condition: service_completed_successfully
+    entrypoint:
+    - fondant
+    - execute
+    - main
+    labels:
+      pipeline_description: A pipeline to extract features from protein sequences.
+    ports:
+    - 8787:8787
+    volumes:
+    - source: C:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\.fondant
+      target: /.fondant
+      type: bind
+    - c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline/data:/data
+  load_from_parquet:
+    command:
+    - --metadata
+    - '{"base_path": "/.fondant", "pipeline_name": "feature_extraction_pipeline",
+      "run_id": "feature_extraction_pipeline-20240517133520", "component_id": "load_from_parquet",
+      "cache_key": "e0f0788509d754d0430735f0f58ba677"}'
+    - --output_manifest_path
+    - /.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/load_from_parquet/manifest.json
+    - --dataset_uri
+    - /data/mock_data.parquet
+    - --cache
+    - 'True'
+    - --cluster_type
+    - default
+    - --operation_spec
+    - '{"specification": {"name": "Load from parquet", "image": "fndnt/load_from_parquet:0.10.1",
+      "description": "Component that loads a dataset from a parquet uri", "tags":
+      ["Data loading"], "produces": {"additionalProperties": true}, "args": {"dataset_uri":
+      {"description": "The remote path to the parquet file/folder containing the dataset",
+      "type": "str"}, "column_name_mapping": {"description": "Mapping of the consumed
+      dataset", "type": "dict", "default": {}}, "n_rows_to_load": {"description":
+      "Optional argument that defines the number of rows to load. Useful for testing
+      pipeline runs on a small scale", "type": "int", "default": "None"}, "index_column":
+      {"description": "Column to set index to in the load component, if not specified
+      a default globally unique index will be set", "type": "str", "default": "None"}}},
+      "consumes": {}, "produces": {"sequence": {"type": "string"}}}'
+    depends_on: {}
+    entrypoint:
+    - fondant
+    - execute
+    - main
+    image: fndnt/load_from_parquet:0.10.1
+    labels:
+      pipeline_description: A pipeline to extract features from protein sequences.
+    ports:
+    - 8787:8787
+    volumes:
+    - source: C:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline\.fondant
+      target: /.fondant
+      type: bind
+    - c:\Users\denis\Desktop\poc-protein\poc-protein-feature-extraction\fondant-pipeline/data:/data
+version: '3.8'

@@ -1,0 +1,1 @@
+/.fondant/feature_extraction_pipeline/feature_extraction_pipeline-20240517133520/generate_protein_sequence_checksum_component/manifest.json
