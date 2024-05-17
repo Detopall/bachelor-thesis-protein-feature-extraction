@@ -7,16 +7,17 @@ for easy storage and retrieval in the dataframe.
 import logging
 import os
 import json
+
 import pandas as pd
-from dotenv import load_dotenv # pylint: disable=import-error
 import requests
 from requests.exceptions import RequestException
+from dotenv import load_dotenv
 from fondant.component import PandasTransformComponent
 
 # Load the environment variables
 load_dotenv()
 
-# Set up logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -41,21 +42,8 @@ class PredictProtein3DStructureComponent(PandasTransformComponent):
 
 		self.protein_smiles_path = protein_smiles_path
 
-		self.check_existence_of_files()
-
 		if not self.hf_api_key or not self.hf_endpoint_url:
 			raise ValueError("environment variables not set.")
-
-
-	def check_existence_of_files(self) -> None:
-		"""Check if the required files exist in the local_pdb_files_path directory."""
-
-		if not os.path.exists(self.protein_smiles_path):
-			logger.error(
-				f"File {self.protein_smiles_path} not found. Please make sure the file exists.")
-			raise FileNotFoundError(
-				f"File {self.protein_smiles_path} not found. Please make sure the file exists.")
-
 
 	def transform(self, dataframe: pd.DataFrame) -> pd.DataFrame:
 		"""Perform the transformation on the dataframe."""

@@ -1,0 +1,5 @@
+fondant-pipeline/components/biopython_component/src
+fondant-pipeline/components/generate_protein_sequence_checksum_component/src
+fondant-pipeline/components/iFeatureOmega_component/src
+fondant-pipeline/components/peptide_features_component/src
+fondant-pipeline/components/unikp_component/src

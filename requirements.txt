@@ -7,3 +7,5 @@ seaborn==0.13.2
 xgboost==2.0.3
 fondant==0.11.dev5
 dask[dataframe,distributed]==2024.2.0
+bandit==1.7.1
+pylint==2.5.3

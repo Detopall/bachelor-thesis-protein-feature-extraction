@@ -1,6 +1,6 @@
 # Generate Protein Sequence Checksum Component
 
-A component that applies that uses the checksum operator on the 'sequence' from Biopython to create the 'sequence_id' feature. The features generated are placed in the `fondant_component.yaml` file.
+A component that applies that uses the checksum operator on the 'sequence' from [Biopython](https://pypi.org/project/biopython/) to create the 'sequence_id' feature.
 
 ## Env Setup
 
